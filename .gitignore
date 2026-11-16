@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+outputs/
+build/
+dist/
+.ipynb_checkpoints/
+.env
+*.pem
+data/*.csv
+data/*.parquet
+!data/reference_instances/**

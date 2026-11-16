@@ -1,0 +1,13 @@
+# Overrides merged into every reference instance by `qportfolio benchmark configs/benchmark_full.yaml`.
+benchmark:
+  enabled: true
+  seeds: 5
+  miqp_time_limit: 10.0
+  include_quantum: true
+
+solver:
+  algorithm: qaoa
+  p_layers: 2
+  max_iterations: 40
+  backend:
+    type: simulator

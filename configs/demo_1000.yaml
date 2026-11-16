@@ -1,0 +1,38 @@
+# Scale demo: 1000 synthetic assets, K=30, cluster-decomposed into <=12-qubit sub-problems.
+# Use `qportfolio dry-run` first to see qubit / depth / job counts before running.
+run:
+  name: demo_1000
+  seed: 11
+  output_dir: outputs/demo_1000
+  n_jobs: -1
+
+data:
+  source: synthetic
+  synthetic:
+    n_assets: 1000
+    n_sectors: 11
+    n_factors: 5
+    n_days: 750
+
+mandate:
+  K: 30
+  lambda_risk: 3.0
+  w_max: 0.06
+
+decomposition:
+  max_cluster_size: 12
+
+solver:
+  algorithm: qaoa
+  p_layers: 2
+  max_iterations: 30
+  shots: 2048
+  backend:
+    type: simulator
+
+recombination:
+  beam_width: 200
+  top_r: 300
+
+menu:
+  size: 10

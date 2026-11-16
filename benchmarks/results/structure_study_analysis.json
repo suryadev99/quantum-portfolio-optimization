@@ -1,0 +1,238 @@
+{
+ "tests": {
+  "H11:mp_vs_default": {
+   "arm": "mp",
+   "control": "default",
+   "n_pairs": 99,
+   "mean_diff_pp": 0.000671134523242855,
+   "ci95": [
+    0.0,
+    0.0020134035697283175
+   ],
+   "identical_share": 0.98989898989899,
+   "p": 1.0,
+   "p_holm": 1.0,
+   "outcome": "refuted"
+  },
+  "H12:modularity_vs_default": {
+   "arm": "modularity",
+   "control": "default",
+   "n_pairs": 99,
+   "mean_diff_pp": 0.021552617582025937,
+   "ci95": [
+    0.0,
+    0.0646578527460776
+   ],
+   "identical_share": 0.98989898989899,
+   "p": 1.0,
+   "p_holm": 1.0,
+   "outcome": "refuted"
+  },
+  "H12:modularity_vs_spectral": {
+   "arm": "modularity",
+   "control": "spectral",
+   "n_pairs": 100,
+   "mean_diff_pp": 0.005982389945472472,
+   "ci95": [
+    -0.04606410438224116,
+    0.06401127421863728
+   ],
+   "identical_share": 0.97,
+   "p": 0.7535123243837808,
+   "p_holm": 1.0,
+   "outcome": "refuted"
+  },
+  "H19:rebalance_vs_default": {
+   "arm": "rebalance",
+   "control": "default",
+   "n_pairs": 102,
+   "mean_diff_pp": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "identical_share": 1.0,
+   "p": 1.0,
+   "p_holm": 1.0,
+   "outcome": "refuted"
+  }
+ },
+ "hypotheses": {
+  "H11": {
+   "claim": "Marchenko-Pastur denoising gives a lower decomposition gap than market-mode removal alone.",
+   "outcome": "refuted",
+   "tests": [
+    "H11:mp_vs_default"
+   ]
+  },
+  "H12": {
+   "claim": "Modularity bisection gives a lower decomposition gap than hierarchical AND than spectral clustering at the same size cap.",
+   "outcome": "refuted",
+   "tests": [
+    "H12:modularity_vs_default",
+    "H12:modularity_vs_spectral"
+   ]
+  },
+  "H19": {
+   "claim": "Risk rebalancing (norm_ratio) gives a lower decomposition gap than no rebalancing.",
+   "outcome": "refuted",
+   "tests": [
+    "H19:rebalance_vs_default"
+   ]
+  }
+ },
+ "descriptive": {
+  "no_denoise": {
+   "gap_vs_default": [
+    0.004543213022173215,
+    -1.3707235487224962e-15,
+    0.013629639066521015
+   ],
+   "cut_share_vs_default": [
+    0.010659976589763323,
+    0.008715507608849824,
+    0.012725903957917102
+   ]
+  },
+  "mp": {
+   "gap_vs_default": [
+    0.000671134523242855,
+    0.0,
+    0.0020134035697283175
+   ],
+   "cut_share_vs_default": [
+    0.019101688303286866,
+    0.01597745321097487,
+    0.02225139416932475
+   ]
+  },
+  "spectral": {
+   "gap_vs_default": [
+    0.013086880550261396,
+    -4.133997681698886e-14,
+    0.03783912973704173
+   ],
+   "cut_share_vs_default": [
+    0.01893224799326032,
+    0.015171268790817379,
+    0.022865815144227728
+   ]
+  },
+  "modularity": {
+   "gap_vs_default": [
+    0.021552617582025937,
+    0.0,
+    0.0646578527460776
+   ],
+   "cut_share_vs_default": [
+    0.0376869993641846,
+    0.03155612827789374,
+    0.04380831704823204
+   ]
+  },
+  "rebalance": {
+   "gap_vs_default": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "cut_share_vs_default": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "best_combo": {
+   "gap_vs_default": [
+    0.002559916918035203,
+    0.0,
+    0.00767975075410561
+   ],
+   "cut_share_vs_default": [
+    0.03696835716286756,
+    0.03151104340100808,
+    0.042477000138472686
+   ]
+  },
+  "mp_vs_no_denoise": {
+   "gap": [
+    -0.006973269792022887,
+    -0.017825329428210215,
+    1.158744534477938e-15
+   ]
+  }
+ },
+ "arms": {
+  "default": {
+   "runs": 108.0,
+   "median_gap_pct": 0.0,
+   "mean_gap_pct": 2.256427611239742e-14,
+   "share_at_reference": 1.0,
+   "median_cut_share": 0.7999745555153995,
+   "median_clusters": 17.0,
+   "median_seconds": 0.11724522907752544
+  },
+  "no_denoise": {
+   "runs": 108.0,
+   "median_gap_pct": 0.0,
+   "mean_gap_pct": 0.007562072247580525,
+   "share_at_reference": 0.9801980198019802,
+   "median_cut_share": 0.8093580882562716,
+   "median_clusters": 19.5,
+   "median_seconds": 0.12464808346703649
+  },
+  "mp": {
+   "runs": 108.0,
+   "median_gap_pct": 0.0,
+   "mean_gap_pct": 0.000664423178033442,
+   "share_at_reference": 0.99,
+   "median_cut_share": 0.8301102643079212,
+   "median_clusters": 16.0,
+   "median_seconds": 0.11648639605846256
+  },
+  "spectral": {
+   "runs": 108.0,
+   "median_gap_pct": 0.0,
+   "mean_gap_pct": 0.03034063895956413,
+   "share_at_reference": 0.9611650485436893,
+   "median_cut_share": 0.8222033921604937,
+   "median_clusters": 16.5,
+   "median_seconds": 0.17439381242729723
+  },
+  "modularity": {
+   "runs": 108.0,
+   "median_gap_pct": 0.0,
+   "mean_gap_pct": 0.021337091406228838,
+   "share_at_reference": 0.99,
+   "median_cut_share": 0.852273320240627,
+   "median_clusters": 14.0,
+   "median_seconds": 0.12687120807822794
+  },
+  "rebalance": {
+   "runs": 108.0,
+   "median_gap_pct": 0.0,
+   "mean_gap_pct": 2.256427611239742e-14,
+   "share_at_reference": 1.0,
+   "median_cut_share": 0.7999745555153995,
+   "median_clusters": 17.0,
+   "median_seconds": 0.12971904140431434
+  },
+  "best_combo": {
+   "runs": 108.0,
+   "median_gap_pct": 0.0,
+   "mean_gap_pct": 0.011010091977325593,
+   "share_at_reference": 0.9803921568627451,
+   "median_cut_share": 0.8534486775302523,
+   "median_clusters": 15.0,
+   "median_seconds": 0.11432437505573034
+  }
+ },
+ "gate": {
+  "audit_violations": 0,
+  "infeasible_runs": 46,
+  "runs": 756,
+  "passed": false
+ },
+ "wall_seconds": 207.39951987494715,
+ "workers": 6
+}

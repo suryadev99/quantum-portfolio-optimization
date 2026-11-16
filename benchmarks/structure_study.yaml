@@ -1,0 +1,68 @@
+# Pre-registration for ablations A12, A13, A15 (spec §7.1 H11, H12, H19; §7.7 rules 5 and 6).
+# Written BEFORE any result was computed. Do not edit after the first run; add a dated amendment instead.
+#
+# Question: does the structure-finding part of the pipeline (denoising, clustering, risk rebalancing)
+# reduce the objective loss caused by decomposition? The sub-solver is EXACT in every arm so that the
+# quantum step is not a confound: this isolates the classical decomposition choices only.
+
+design:
+  sub_solver: exact              # isolates decomposition from sampling
+  max_cluster_size: 10
+  families: [S, C, H]            # factor model, constrained, hard (dense, strongly correlated)
+  sizes: [60, 100, 140]
+  seeds: 12                      # >= 10 as required; instances are seeds 101..112 per (family, size)
+  pairing: instance              # every arm sees the identical universe, mandate and seed
+  reference_for_gap: >
+    best objective found by ANY arm or by the time-limited MIQP (6 s) on the same instance.
+    This favours no single arm but is not a proven optimum; gaps are lower bounds on true loss.
+
+arms:                            # one factor at a time around the repository default
+  default:        {denoise: market_mode,      remove_market_mode: true,  clusterer: hierarchical, risk_rebalance: none}
+  no_denoise:     {denoise: market_mode,      remove_market_mode: false, clusterer: hierarchical, risk_rebalance: none}
+  mp:             {denoise: marchenko_pastur, remove_market_mode: true,  clusterer: hierarchical, risk_rebalance: none}
+  spectral:       {denoise: market_mode,      remove_market_mode: true,  clusterer: spectral,     risk_rebalance: none}
+  modularity:     {denoise: market_mode,      remove_market_mode: true,  clusterer: modularity,   risk_rebalance: none}
+  rebalance:      {denoise: market_mode,      remove_market_mode: true,  clusterer: hierarchical, risk_rebalance: norm_ratio}
+  best_combo:     {denoise: marchenko_pastur, remove_market_mode: true,  clusterer: modularity,   risk_rebalance: none}
+
+metrics:
+  primary: decomposition_gap_pct   # 100 * (best_objective - reference) / |reference|; lower is better
+  secondary:
+    - cut_share                    # share of |residual correlation| between clusters, common yardstick; lower is better (descriptive)
+    - n_clusters
+    - max_cluster_size
+    - seconds
+  correctness_gate: audit_violations == 0 and infeasible_runs == 0   # must hold in every run, every arm
+
+tolerances:                        # fixed before looking at data
+  gap_pp: 0.10                     # a difference under 0.1 percentage points is not practically meaningful
+  cut_share_abs: 0.01
+
+statistics:
+  paired_difference: arm minus control, per instance      # negative = arm better
+  interval: 95% percentile bootstrap over instances, 5000 resamples, seed 20261115
+  multiplicity: Holm-Bonferroni over the four primary tests below (alpha 0.05)
+  outcome_rule: |
+    supported    : mean difference < -gap_pp AND the Holm-adjusted p < 0.05 AND the 95% CI excludes 0
+    refuted      : the 95% CI lies entirely within +/- gap_pp (no practically meaningful difference), OR
+                   mean difference > +gap_pp with the 95% CI excluding 0 (arm is worse)
+    inconclusive : anything else
+
+hypotheses:
+  H11:
+    claim: Marchenko-Pastur denoising gives a lower decomposition gap than market-mode removal alone.
+    test: {arm: mp, control: default}
+  H12:
+    claim: Modularity bisection gives a lower decomposition gap than hierarchical AND than spectral clustering at the same size cap.
+    tests:
+      - {arm: modularity, control: default}      # vs hierarchical
+      - {arm: modularity, control: spectral}
+    rule: supported only if BOTH comparisons are supported
+  H19:
+    claim: Risk rebalancing (norm_ratio) gives a lower decomposition gap than no rebalancing.
+    test: {arm: rebalance, control: default}
+
+descriptive_only:                  # reported, no decision attached, no multiplicity budget spent
+  - {arm: mp, control: no_denoise}
+  - {arm: best_combo, control: default}
+  - cut_share differences for every arm against default (existing H2 was refuted on cut share)
